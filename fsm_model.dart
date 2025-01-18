@@ -32,19 +32,19 @@
 
 import 'dart:async';
 
-/// Definizione delle azioni per gli stati ed eventi
+/// Definition of actions for states and events
 typedef StateAction<C> = Future<C?> Function(C context);
 typedef EventAction<C> = Future<C?> Function(C context);
 typedef StateActionAsync<C> = Future<C?> Function(C context);
 typedef EventActionAsync<C> = Future<C?> Function(C context);
 
-/// Classe base per gli stati
+/// Base class for states
 abstract class MachineState {}
 
-/// Classe base per gli eventi
+/// Base class for events
 abstract class MachineEvent {}
 
-/// Classe per le transizioni
+/// Class for transitions
 class Transition<C, S extends MachineState, E extends MachineEvent> {
   final S nextState;
   final EventActionAsync<C>? transitionAction;
@@ -59,7 +59,7 @@ class Transition<C, S extends MachineState, E extends MachineEvent> {
   });
 }
 
-/// Classe per gli stati con azioni di entrata e uscita
+/// Class for states with entry and exit actions
 abstract class StateWithEntryExit<C> extends MachineState {
   final StateAction<C>? stateEntryAction;
   final StateAction<C>? stateExitAction;
@@ -67,68 +67,7 @@ abstract class StateWithEntryExit<C> extends MachineState {
   StateWithEntryExit({this.stateEntryAction, this.stateExitAction});
 }
 
-/// Classe per la macchina a stati finiti
-// abstract class StateMachine<C, S extends MachineState, E extends MachineEvent> {
-//   StateMachine(this.context, this.state, this.transitions);
-
-//   final Map<Type, Map<Type, Transition<C, S, E>>> transitions;
-//   S state;
-//   C context;
-//   final StreamController<S> _stateController = StreamController<S>.broadcast();
-
-//   Stream<S> get stateStream => _stateController.stream;
-
-//   Future<void> close() async {
-//     await _stateController.close();
-//   }
-
-//   void addEvent(E event) async {
-//     final transitionsForState = transitions[state.runtimeType];
-//     if (transitionsForState != null) {
-//       final transition = transitionsForState[event.runtimeType];
-//       if (transition != null) {
-//         // Esegui l'azione di uscita associata alla transizione
-//         if (transition.transitionExitAction != null) {
-//           context = await transition.transitionExitAction!(context) ?? context;
-//         }
-//         // Esegui l'azione di uscita dello stato corrente
-//         if (state is StateWithEntryExit<C>) {
-//           final exitAction = (state as StateWithEntryExit<C>).stateExitAction;
-//           if (exitAction != null) {
-//             context = await exitAction(context) ?? context;
-//           }
-//         }
-//         // Esegui l'azione associata all'evento (azione della transizione)
-//         if (transition.transitionAction != null) {
-//           context = await transition.transitionAction!(context) ?? context;
-//         }
-//         // Aggiorna lo stato
-//         state = transition.nextState;
-//         // Esegui l'azione di entrata associata alla transizione
-//         if (transition.transitionEntryAction != null) {
-//           context = await transition.transitionEntryAction!(context) ?? context;
-//         }
-//         // Esegui l'azione di entrata del nuovo stato
-//         if (state is StateWithEntryExit<C>) {
-//           final entryAction = (state as StateWithEntryExit<C>).stateEntryAction;
-//           if (entryAction != null) {
-//             context = await entryAction(context) ?? context;
-//           }
-//         }
-//         _stateController.add(state);
-//         return;
-//       }
-//     }
-//     // Gestione dell'evento non permesso nello stato corrente
-//     handleInvalidEvent(event);
-//   }
-
-//   void handleInvalidEvent(E event) {
-//     print(
-//         'Evento ${event.runtimeType} non permesso nello stato ${state.runtimeType}');
-//   }
-// }
-
+/// Class for state machine model
 abstract class StateMachine<C, S extends MachineState, E extends MachineEvent> {
   StateMachine(this.context, this.state, this.transitions);
 
