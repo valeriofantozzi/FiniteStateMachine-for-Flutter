@@ -58,6 +58,58 @@ When you call `stateMachine.addEvent(...)`, the following actions occur in order
 No valid transition?  
 If no transition is defined for (current state + event), the event is ignored (or handled as invalid, depending on your logic).
 
+
+### **5. Add Events**
+
+Trigger events to drive state transitions:
+
+```dart
+stateMachine.addEvent(StartEvent());
+stateMachine.addEvent(StopEvent());
+```
+
+Sequence of Events During a Transition
+
+1. 🚦 **Locate the corresponding transition:** Checks validity.
+2. ⚙️ **Execute transitionAction:** Runs before changing the state.
+3. 🔄 **Update the currentState:** Switches to the new state.
+4. 🏗️ **Execute transitionEntryAction:** After state update.
+5. ❌ **No valid transition?** Event is ignored or handled as invalid.
+
+
+### **Graphical Representation** 🖼️
+
+```bash
+[Incoming Event] --> Check if (currentState + event) is valid
+             |
+             +--(Valid)----------------------------------------------+
+             |                                                      |
+             v                                                      |
+     (1) transitionExitAction() [OLD STATE CONTEXT]                 |
+             |                                                      |
+             v                                                      |
+        (2) stateExitAction() [OLD STATE EXIT LOGIC]                |
+             |                                                      |
+             v                                                      |
+        (3) transitionAction() [BRIDGE BETWEEN OLD & NEW STATE]     |
+             |                                                      |
+             v                                                      |
+ (4) currentState = nextState (ACTUAL STATE SWITCH)                 |
+             |                                                      |
+             v                                                      |
+    (5) transitionEntryAction() [NEW STATE CONTEXT]                 |
+             |                                                      |
+             v                                                      |
+        (6) stateEntryAction() [NEW STATE ENTRY LOGIC]              |
+             |                                                      |
+             v                                                      |
+       (7) Notify/Signal State Change (e.g., UI update)             |
+             |                                                      |
+             +------------------------------------------------------+
+             |
+             +--(Invalid)--> [Handle or ignore invalid event]
+```
+
 ---
 
 ## **How to Use** ⚙️
@@ -119,58 +171,6 @@ final stateMachine = StateMachine(
   state: IdleState(),
   transitions: transitions,
 );
-```
-
-### **5. Add Events**
-
-Trigger events to drive state transitions:
-
-```dart
-stateMachine.addEvent(StartEvent());
-stateMachine.addEvent(StopEvent());
-```
-
-Sequence of Events During a Transition
-
-1. 🚦 **Locate the corresponding transition:** Checks validity.
-2. ⚙️ **Execute transitionAction:** Runs before changing the state.
-3. 🔄 **Update the currentState:** Switches to the new state.
-4. 🏗️ **Execute transitionEntryAction:** After state update.
-5. ❌ **No valid transition?** Event is ignored or handled as invalid.
-
----
-
-### **Graphical Representation** 🖼️
-
-```bash
-[Incoming Event] --> Check if (currentState + event) is valid
-             |
-             +--(Valid)----------------------------------------------+
-             |                                                      |
-             v                                                      |
-     (1) transitionExitAction() [OLD STATE CONTEXT]                 |
-             |                                                      |
-             v                                                      |
-        (2) stateExitAction() [OLD STATE EXIT LOGIC]                |
-             |                                                      |
-             v                                                      |
-        (3) transitionAction() [BRIDGE BETWEEN OLD & NEW STATE]     |
-             |                                                      |
-             v                                                      |
- (4) currentState = nextState (ACTUAL STATE SWITCH)                 |
-             |                                                      |
-             v                                                      |
-    (5) transitionEntryAction() [NEW STATE CONTEXT]                 |
-             |                                                      |
-             v                                                      |
-        (6) stateEntryAction() [NEW STATE ENTRY LOGIC]              |
-             |                                                      |
-             v                                                      |
-       (7) Notify/Signal State Change (e.g., UI update)             |
-             |                                                      |
-             +------------------------------------------------------+
-             |
-             +--(Invalid)--> [Handle or ignore invalid event]
 ```
 
 ---
