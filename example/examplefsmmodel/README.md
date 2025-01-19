@@ -51,8 +51,8 @@ my_fsm_example/
     • StartWizardEvent
     • NextStepEvent
     • ResetWizardEvent
-    Transitions:
     
+    Transitions:
     • IdleState → StepOneState on StartWizardEvent
     • StepOneState → StepTwoState on NextStepEvent
     • StepTwoState → CompletedState on NextStepEvent
