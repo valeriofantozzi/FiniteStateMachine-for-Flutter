@@ -153,6 +153,38 @@ When you call stateMachine.addEvent(...), the following actions occur in order:
 5. No valid transition?
    If there is no defined transition for (current state + event), the event is ignored (or handled as an invalid scenario, depending on your implementation).
 
+
+[ Incoming Event ]
+|
++– Check if (currentState + event) has a valid transition?
+|
++–(Valid)—————————————————––+
+|                                                                |
+v                                                                |
+(1) transitionExitAction()  [OLD STATE CONTEXT]                          |
+|                                                                |
+v                                                                |
+(2) stateExitAction()       [OLD STATE EXIT LOGIC]                       |
+|                                                                |
+v                                                                |
+(3) transitionAction()      [BRIDGE BETWEEN OLD & NEW STATE]             |
+|                                                                |
+v                                                                |
+(4) currentState = nextState (ACTUAL STATE SWITCH)                       |
+|                                                                |
+v                                                                |
+(5) transitionEntryAction() [NEW STATE CONTEXT]                          |
+|                                                                |
+v                                                                |
+(6) stateEntryAction()      [NEW STATE ENTRY LOGIC]                      |
+|                                                                |
+v                                                                |
+(7) Notify State Change      [e.g., UI update or callback]               |
+|                                                                |
++—————————————————————+
+|
++–(Invalid)–> [Handle or ignore invalid event]
+
 ---
 
 ## **Installation**
