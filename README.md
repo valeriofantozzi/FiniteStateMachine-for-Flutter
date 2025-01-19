@@ -181,6 +181,7 @@ final stateMachine = StateMachine(
    ```bash
    git clone https://github.com/<your-username>/fsm_model.git
    cd fsm_model
+   flutter pub get
    ```
 2. Include the `fsm_model.dart` file in your Dart project.
 3. Ensure your project is set up for asynchronous programming with Dart.
