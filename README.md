@@ -153,8 +153,8 @@ When you call stateMachine.addEvent(...), the following actions occur in order:
 5. No valid transition?
    If there is no defined transition for (current state + event), the event is ignored (or handled as an invalid scenario, depending on your implementation).
 
-
-[Incoming Event] --> Check if (currentState + event) is valid
+   ```bash
+   [Incoming Event] --> Check if (currentState + event) is valid
                 |
                 +--(Valid)----------------------------------------------+
                 |                                                      |
@@ -182,7 +182,10 @@ When you call stateMachine.addEvent(...), the following actions occur in order:
                 +------------------------------------------------------+
                 |
                 +--(Invalid)--> [Handle or ignore invalid event]
+   ```
 
+
+If no **valid transition** exists, the event is considered **invalid** for the current state. You can choose to log it, throw an error, or simply ignore it, depending on your requirements.
 ---
 
 ## **Installation**
