@@ -188,15 +188,15 @@ Below is a simplified ASCII diagram representing the flow when a **valid** trans
              +--(Invalid)--> [Handle or ignore invalid event]
 ```
 
-**Incoming Event**: An event is dispatched to the FSM.
-**Check Validity**: The machine verifies whether the `(currentState + event)` combination is defined.
-**transitionExitAction**: Optional transition-specific exit logic, run while still in the _old_ state.
-**stateExitAction**: General exit logic for the _old_ state, regardless of which transition triggered it.
-**transitionAction**: Optional bridging logic that occurs after leaving the old state but before entering the new one.
-**Switch State**: The FSM changes `currentState` to `nextState`.
-**transitionEntryAction**: Optional transition-specific logic upon _first entering_ the new state.
-**stateEntryAction**: General entry logic for the _new_ state.
-**Notify State Change**: The machine signals (e.g., via a callback or stream) that the state has changed.
+- **Incoming Event**: An event is dispatched to the FSM.
+- **Check Validity**: The machine verifies whether the `(currentState + event)` combination is defined.
+- **transitionExitAction**: Optional transition-specific exit logic, run while still in the _old_ state.
+- **stateExitAction**: General exit logic for the _old_ state, regardless of which transition triggered it.
+- **transitionAction**: Optional bridging logic that occurs after leaving the old state but before entering the new one.
+- **Switch State**: The FSM changes `currentState` to `nextState`.
+- **transitionEntryAction**: Optional transition-specific logic upon _first entering_ the new state.
+- **stateEntryAction**: General entry logic for the _new_ state.
+- **Notify State Change**: The machine signals (e.g., via a callback or stream) that the state has changed.
 
 ## If no **valid transition** exists, the event is considered **invalid** for the current state. You can choose to log it, throw an error, or simply ignore it, depending on your requirements.
 
