@@ -41,16 +41,16 @@ my_fsm_example/
 
 ## How It Works
 
-    • States:
+    States:
     • IdleState
     • StepOneState
     • StepTwoState
     • CompletedState
-    • Events:
+    Events:
     • StartWizardEvent
     • NextStepEvent
     • ResetWizardEvent
-    • Transitions:
+    Transitions:
     • IdleState → StepOneState on StartWizardEvent
     • StepOneState → StepTwoState on NextStepEvent
     • StepTwoState → CompletedState on NextStepEvent
