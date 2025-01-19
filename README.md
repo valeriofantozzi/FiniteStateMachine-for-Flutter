@@ -1,21 +1,21 @@
-# FiniteStateMachine FSM Model in Dart
+# FiniteStateMachine FSM Model in Dart 🚦
 
-This repository contains a **Finite State Machine (FSM)** model implemented in Dart. The FSM is designed to handle complex state transitions in a structured and scalable manner, making it ideal for applications such as workflows, game development, or any scenario requiring dynamic state management.
-
----
-
-## **Features**
-
-- **Modular Design:** Separate classes for states, events, and transitions for maximum flexibility.
-- **Asynchronous Actions:** Supports async/await for non-blocking operations during state transitions.
-- **Entry and Exit Actions:** Execute specific actions when entering or exiting a state.
-- **Event Queue:** Ensures proper handling of multiple events by processing them sequentially.
-- **Invalid Event Handling:** Detects and logs events that are not valid for the current state.
-- **State Stream:** Provides a stream for observing state changes in real time.
+This repository contains a **Finite State Machine (FSM)** model implemented in Dart 🤖. The FSM is designed to handle complex state transitions in a structured and scalable manner, making it ideal for applications such as workflows, game development, or any scenario requiring dynamic state management.
 
 ---
 
-## **Components**
+## **Features** 🚀
+
+- **Modular Design:** Separate classes for states, events, and transitions for maximum flexibility ⚙️
+- **Asynchronous Actions:** Supports async/await for non-blocking operations ⏰
+- **Entry and Exit Actions:** Execute specific actions on entering and exiting a state 🚪
+- **Event Queue:** Ensures proper handling of multiple events by processing them sequentially 📜
+- **Invalid Event Handling:** Detects and logs events that are not valid for the current state ❌
+- **State Stream:** Provides a stream for observing state changes in real time 🌐
+
+---
+
+## **Components** 🧩
 
 ### 1. **MachineState**
 
@@ -44,35 +44,27 @@ The main class that:
 
 ### 6. **Sequence of Events During a Transition**
 
-When you call stateMachine.addEvent(...), the following actions occur in order:
+When you call `stateMachine.addEvent(...)`, the following actions occur in order:
 
-1. Locate the corresponding transition
-   The FSM determines if there is a valid transition based on the current state and the incoming event.
-2. Execute transitionExitAction (if defined)
-   This step occurs while still in the old state, allowing for cleanup tasks related to that specific transition.
-3. Execute stateExitAction (if defined)
-   This step handles the general exit logic for leaving the old state, regardless of which event triggered it.
-4. Execute transitionAction (if defined)
-   This is often used for logic that should happen between exiting the old state and entering the new one— e.g., sending a network request, updating data, etc.
-5. Update the currentState
-   The FSM sets currentState to the new nextState.
-6. Execute transitionEntryAction (if defined)
-   A transition-specific action that applies immediately after the state change.
-7. Execute stateEntryAction (if defined)
-   This is the general entry logic for the new state, setting up anything needed or performing additional initialization.
-8. Notify State Change
-   The machine may notify observers or trigger a callback to indicate that the state has changed (e.g., a UI update).
+1. 🚀 **Locate the corresponding transition**
+2. 🏁 **Execute transitionExitAction (if defined)**
+3. 🚪 **Execute stateExitAction (if defined)**
+4. ⚙️ **Execute transitionAction (if defined)**
+5. 🔄 **Update the currentState**
+6. 🏗️ **Execute transitionEntryAction (if defined)**
+7. 📥 **Execute stateEntryAction (if defined)**
+8. 🔔 **Notify State Change**
 
-No valid transition?
+No valid transition?  
 If no transition is defined for (current state + event), the event is ignored (or handled as invalid, depending on your logic).
 
 ---
 
-## **How to Use**
+## **How to Use** ⚙️
 
 ### **1. Define Your States**
 
-Create classes extending `MachineState` to define each state in your FSM:
+Create classes extending `MachineState`:
 
 ```dart
 class IdleState extends MachineState {}
@@ -81,7 +73,7 @@ class RunningState extends MachineState {}
 
 ### **2. Define Your Events**
 
-Create classes extending `MachineEvent` to define the events:
+Create classes extending `MachineEvent`:
 
 ```dart
 class StartEvent extends MachineEvent {}
@@ -90,7 +82,7 @@ class StopEvent extends MachineEvent {}
 
 ### **3. Create Transitions**
 
-Define transitions between states using the `Transition` class:
+Define transitions between states:
 
 ```dart
 final startTransition = Transition(
@@ -104,7 +96,7 @@ final startTransition = Transition(
 
 ### **4. Initialize the State Machine**
 
-Set up the FSM by defining its initial state, context, and transition map:
+Set up the FSM:
 
 ```dart
 final Map<Type, Map<Type, Transition>> transitions = {
@@ -140,22 +132,15 @@ stateMachine.addEvent(StopEvent());
 
 Sequence of Events During a Transition
 
-When you call stateMachine.addEvent(...), the following actions occur in order:
+1. 🚦 **Locate the corresponding transition:** Checks validity.
+2. ⚙️ **Execute transitionAction:** Runs before changing the state.
+3. 🔄 **Update the currentState:** Switches to the new state.
+4. 🏗️ **Execute transitionEntryAction:** After state update.
+5. ❌ **No valid transition?** Event is ignored or handled as invalid.
 
-1. Locate the corresponding transition:
-   The FSM determines if there is a valid transition based on the current state and the incoming event.
-2. Execute transitionAction:
-   If a valid transition is found, the optional asynchronous transitionAction(context) runs before changing the state. This is typically used to perform any logic required (e.g., updating data, logging, etc.).
-3. Update the currentState:
-   The FSM then sets currentState to the nextState defined in the transition, indicating the state change.
-4. Execute transitionEntryAction:
-   After the state is updated, the FSM invokes the optional transitionEntryAction(context), which can initialize or configure anything needed in the new state.
-5. No valid transition?
-   If there is no defined transition for (current state + event), the event is ignored (or handled as an invalid scenario, depending on your implementation).
+---
 
-### **Graphical Representation**
-
-Below is a simplified ASCII diagram representing the flow when a **valid** transition occurs:
+### **Graphical Representation** 🖼️
 
 ```bash
 [Incoming Event] --> Check if (currentState + event) is valid
@@ -188,54 +173,41 @@ Below is a simplified ASCII diagram representing the flow when a **valid** trans
              +--(Invalid)--> [Handle or ignore invalid event]
 ```
 
-- **Incoming Event**: An event is dispatched to the FSM.
-- **Check Validity**: The machine verifies whether the `(currentState + event)` combination is defined.
-- **transitionExitAction**: Optional transition-specific exit logic, run while still in the _old_ state.
-- **stateExitAction**: General exit logic for the _old_ state, regardless of which transition triggered it.
-- **transitionAction**: Optional bridging logic that occurs after leaving the old state but before entering the new one.
-- **Switch State**: The FSM changes `currentState` to `nextState`.
-- **transitionEntryAction**: Optional transition-specific logic upon _first entering_ the new state.
-- **stateEntryAction**: General entry logic for the _new_ state.
-- **Notify State Change**: The machine signals (e.g., via a callback or stream) that the state has changed.
+---
 
-## If no **valid transition** exists, the event is considered **invalid** for the current state. You can choose to log it, throw an error, or simply ignore it, depending on your requirements.
-
-## **Installation**
+## **Installation** ⚡
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/<your-username>/fsm_model.git
    cd fsm_model
    ```
-
 2. Include the `fsm_model.dart` file in your Dart project.
-
 3. Ensure your project is set up for asynchronous programming with Dart.
 
 ---
 
-## **Examples**
+## **Examples** 💡
 
 Check out the `examples/` directory for complete usage examples and real-world scenarios.
 
 ---
 
-## **Contributing**
+## **Contributing** 🤝
 
-Contributions are welcome! Feel free to submit issues or pull requests to enhance the FSM or add new features.
+Contributions are welcome! Feel free to submit issues or pull requests.
 
 ---
 
-## **License**
+## **License** 📄
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## **Contact**
+## **Contact** ✉️
 
-For any questions or suggestions, feel free to reach out:
+For any questions or suggestions:
 
 - **Email:** [iamvaleriofantozzi@gmail.com](mailto:iamvaleriofantozzi@gmail.com)
 - **GitHub:** [https://github.com/valeriofantozzi](https://github.com/valeriofantozzi)
