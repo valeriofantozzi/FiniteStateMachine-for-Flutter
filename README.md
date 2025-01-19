@@ -153,40 +153,52 @@ When you call stateMachine.addEvent(...), the following actions occur in order:
 5. No valid transition?
    If there is no defined transition for (current state + event), the event is ignored (or handled as an invalid scenario, depending on your implementation).
 
-   ```bash
-   [Incoming Event] --> Check if (currentState + event) is valid
-                |
-                +--(Valid)----------------------------------------------+
-                |                                                      |
-                v                                                      |
-        (1) transitionExitAction() [OLD STATE CONTEXT]                 |
-                |                                                      |
-                v                                                      |
-           (2) stateExitAction() [OLD STATE EXIT LOGIC]                |
-                |                                                      |
-                v                                                      |
-           (3) transitionAction() [BRIDGE BETWEEN OLD & NEW STATE]     |
-                |                                                      |
-                v                                                      |
-    (4) currentState = nextState (ACTUAL STATE SWITCH)                 |
-                |                                                      |
-                v                                                      |
-       (5) transitionEntryAction() [NEW STATE CONTEXT]                 |
-                |                                                      |
-                v                                                      |
-           (6) stateEntryAction() [NEW STATE ENTRY LOGIC]              |
-                |                                                      |
-                v                                                      |
-          (7) Notify/Signal State Change (e.g., UI update)             |
-                |                                                      |
-                +------------------------------------------------------+
-                |
-                +--(Invalid)--> [Handle or ignore invalid event]
-   ```
+### **Graphical Representation**
 
+Below is a simplified ASCII diagram representing the flow when a **valid** transition occurs:
 
-If no **valid transition** exists, the event is considered **invalid** for the current state. You can choose to log it, throw an error, or simply ignore it, depending on your requirements.
----
+```bash
+[Incoming Event] --> Check if (currentState + event) is valid
+             |
+             +--(Valid)----------------------------------------------+
+             |                                                      |
+             v                                                      |
+     (1) transitionExitAction() [OLD STATE CONTEXT]                 |
+             |                                                      |
+             v                                                      |
+        (2) stateExitAction() [OLD STATE EXIT LOGIC]                |
+             |                                                      |
+             v                                                      |
+        (3) transitionAction() [BRIDGE BETWEEN OLD & NEW STATE]     |
+             |                                                      |
+             v                                                      |
+ (4) currentState = nextState (ACTUAL STATE SWITCH)                 |
+             |                                                      |
+             v                                                      |
+    (5) transitionEntryAction() [NEW STATE CONTEXT]                 |
+             |                                                      |
+             v                                                      |
+        (6) stateEntryAction() [NEW STATE ENTRY LOGIC]              |
+             |                                                      |
+             v                                                      |
+       (7) Notify/Signal State Change (e.g., UI update)             |
+             |                                                      |
+             +------------------------------------------------------+
+             |
+             +--(Invalid)--> [Handle or ignore invalid event]
+```
+
+**Incoming Event**: An event is dispatched to the FSM.
+**Check Validity**: The machine verifies whether the `(currentState + event)` combination is defined.
+**transitionExitAction**: Optional transition-specific exit logic, run while still in the _old_ state.
+**stateExitAction**: General exit logic for the _old_ state, regardless of which transition triggered it.
+**transitionAction**: Optional bridging logic that occurs after leaving the old state but before entering the new one.
+**Switch State**: The FSM changes `currentState` to `nextState`.
+**transitionEntryAction**: Optional transition-specific logic upon _first entering_ the new state.
+**stateEntryAction**: General entry logic for the _new_ state.
+**Notify State Change**: The machine signals (e.g., via a callback or stream) that the state has changed.
+
+## If no **valid transition** exists, the event is considered **invalid** for the current state. You can choose to log it, throw an error, or simply ignore it, depending on your requirements.
 
 ## **Installation**
 
